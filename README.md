@@ -2,7 +2,7 @@
 
 <img src="doc/a.png" alt="a" style="zoom:50%;" />
 
-## 1 Introduction
+## 1.Introduction
 
 A real-time multifunctional Lidar SLAM package. It has dual functions of Mapping and Localization. Supports multiple types of IMUs(6-axis and 9-axis) and Lidars(Velodyne, Livox Avia, Livox Mid 360, RoboSense, Ouster, etc). Supports various types of frontends, such as LOAM, NDT, ICP, etc. Supports multiple fusion methods, such as Kalman filter, optimization method, etc. Support multiple LoopClosure methods. The overall accuracy and efficiency are close to the current state-of-the-art methods.
 
@@ -21,7 +21,7 @@ A real-time multifunctional Lidar SLAM package. It has dual functions of Mapping
 | LoopClosure Methods<br />(only Mapping mode) |        Euclidean distance based, <br />Feature based.        |
 |                Fusion Methods                |   Loose Coupling, <br />Kalman Filter, <br />Optimization.   |
 
-## 2 Prerequisites
+## 2.Prerequisites
 
 ### 2.1 Ubuntu and ROS
 
@@ -50,7 +50,7 @@ make -j
 sudo make install
 ```
 
-## 3 How to Build?
+## 3.How to Build?
 
 ### 3.1 Build from source (Recommend)
 
@@ -89,7 +89,7 @@ Tips:
 
 - Please copy your bag data to the host's directory `funny_lidar_slam/data`. Then you can play them in the container.
 
-## 4 How to run Mapping?
+## 4.How to run Mapping?
 
 Funny-Lidar-SLAM is a multi-functional Lidar SLAM package. You can freely choose the Lidar model, 6-axis or 9-axis IMU ,
 and registration method. To help you get started quickly, here I provide some of my examples on some open source
@@ -176,7 +176,7 @@ Note:
 `map_path`: is the path where the map is stored. If `map_path` is empty, the default path `funny_lidar_slam/data` is used for saving. If you want to save the map to a specific path, set `map_path`. For example: `"map_path: '/home/xx/xxx.pcd'"`
 `split_map`: Whether to divide the map into blocks.
 
-## 5 How to run Localization?
+## 5.How to run Localization?
 
 ### 5.1 Prepare pointcloud map
 
@@ -210,7 +210,7 @@ After running the Localization program, you need to play the bag and set the ini
 
 The localization program does not have a global relocalization function, so the initial position and orientation need to be set manually. For convenience, I use the `2D Pose Estimate` plugin in RVIZ to set the initial pose. If the initial pose effect is not good, you can try to use `2D Pose Estimate` multiple times to set the pose.
 
-## 6 Some Tips
+## 6.Some Tips
 
 - If your IMU is 6-axis, and the fusion method is optimization, you need to ensure that your IMU and Lidar are stationary for at least two seconds before starting to run Mapping or Localization.
 - When you run the Mapping program, the default Rviz configuration will be started. In order to reduce resource usage, the pointcloud map is displayed roughly. If you want to display richer details, pass the Rviz configuration path when running the Mapping launch file. For example: `roslaunch funny_lidar_slam mapping_xxx.launch rviz_config:=/path/to/funny_lidar_slam/launch/display_detailed_without_loopclosure.rviz`
