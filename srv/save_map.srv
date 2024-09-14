@@ -1,0 +1,7 @@
+string map_path
+bool split_map
+---
+bool save_map_succeed
+int64 map_size
+string map_path
+

@@ -1,0 +1,46 @@
+project(unit_test)
+
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+MESSAGE(${GTEST_MAIN_LIBRARIES})
+
+add_library(MAIN_TEST_LIB main_test.cpp)
+target_link_libraries(MAIN_TEST_LIB ${GTEST_LIBRARY} ${GLOG_LIBRARIES} funny_lidar_slam_lib)
+
+add_executable(math_function_ut math_function_ut.cpp)
+target_link_libraries(math_function_ut MAIN_TEST_LIB)
+
+add_executable(preintegration_ut preintegration_ut.cpp)
+target_link_libraries(preintegration_ut MAIN_TEST_LIB)
+
+add_executable(data_searcher_ut data_searcher_ut.cpp)
+target_link_libraries(data_searcher_ut MAIN_TEST_LIB)
+
+add_executable(lidar_distortion_corrector_ut lidar_distortion_corrector_ut.cpp)
+target_link_libraries(lidar_distortion_corrector_ut MAIN_TEST_LIB)
+
+add_executable(lidar_model_ut lidar_model_ut.cpp)
+target_link_libraries(lidar_model_ut MAIN_TEST_LIB)
+
+add_executable(motion_interpolator_ut motion_interpolator_ut.cpp)
+target_link_libraries(motion_interpolator_ut MAIN_TEST_LIB)
+
+add_executable(preintegration_optimization_ut preintegration_optimization_ut.cpp)
+target_link_libraries(preintegration_optimization_ut MAIN_TEST_LIB)
+
+add_executable(imu_data_searcher_ut imu_data_searcher_ut.cpp)
+target_link_libraries(imu_data_searcher_ut MAIN_TEST_LIB)
+
+add_executable(loopclosure_optimization_ut loopclosure_optimization_ut.cpp)
+target_link_libraries(loopclosure_optimization_ut MAIN_TEST_LIB)
+
+# Note: output detail message GTEST_COLOR=TRUE ARGS="-V"
+add_test(NAME test_lidar_model COMMAND lidar_model_ut)
+add_test(NAME test_math_function COMMAND math_function_ut)
+add_test(NAME test_preintegration COMMAND preintegration_ut)
+add_test(NAME test_data_searcher COMMAND data_searcher_ut)
+add_test(NAME test_imu_data_searcher COMMAND imu_data_searcher_ut)
+add_test(NAME test_motion_interpolator COMMAND motion_interpolator_ut)
+add_test(NAME test_loopclosure_optimization COMMAND loopclosure_optimization_ut)
+add_test(NAME test_preintegration_optimization COMMAND preintegration_optimization_ut)
+add_test(NAME test_lidar_distortion_corrector COMMAND lidar_distortion_corrector_ut)
