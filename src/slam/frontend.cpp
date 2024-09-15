@@ -19,7 +19,6 @@
 #include "registration/loam_full_kdtree.h"
 #include "registration/loam_point_to_plane_ivox.h"
 
-#include <fstream>
 #include <ros/ros.h>
 
 FrontEnd::FrontEnd(System* system_ptr) :

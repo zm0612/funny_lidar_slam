@@ -141,9 +141,11 @@ roslaunch funny_lidar_slam mapping_mid360.launch
 rosbag play mid_360.bag # Play one of the sets of data
 ```
 
+Note: If your Mid-360 format is `livox_ros_driver2/CustomMsg`, you can use `4.4 For Livox Avia` to run.
+
 ### 4.4 For Livox Avia
 
-You can download the Livox Avia data from: [Baidu Pan](https://pan.baidu.com/s/1ZJ25shwYG66iU4jHzpCKyA?pwd=xy36)
+You can download the Livox Avia data from: [Baidu Pan](https://pan.baidu.com/s/1ZJ25shwYG66iU4jHzpCKyA?pwd=xy36). 
 
 ```shell
 cd funny_lidar_slam_ws
@@ -152,6 +154,8 @@ roslaunch funny_lidar_slam mapping_livox_avia.launch
 
 rosbag play avia.bag  # Play one of the sets of data
 ```
+
+Note: If your Livox Avia format is `sensor_msgs/PointCloud2`, you can use `4.3 For Livox Mid-360` to run.
 
 ### 4.5 For custom Lidar model (Only supports rotating mechanical Lidar)
 
