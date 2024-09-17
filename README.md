@@ -2,6 +2,8 @@
 
 <img src="doc/a.png" alt="a" style="zoom:50%;" />
 
+Demo video: [bilibili](https://www.bilibili.com/video/BV1KqtgeiEzD/?spm_id_from=333.999.0.0)
+
 ## 1.Introduction
 
 A real-time multifunctional Lidar SLAM package. It has dual functions of Mapping and Localization. Supports multiple types of IMUs(6-axis and 9-axis) and Lidars(Velodyne, Livox Avia, Livox Mid 360, RoboSense, Ouster, etc). Supports various types of frontends, such as LOAM, NDT, ICP, etc. Supports multiple fusion methods, such as Kalman filter, optimization method, etc. Support multiple LoopClosure methods. The overall accuracy and efficiency are close to the current state-of-the-art methods.
