@@ -31,7 +31,7 @@ include_directories(${EIGEN3_INCLUDE_DIRS})
 include(cmake/glog.cmake)
 include_directories(${GLOG_INCLUDE_DIRS})
 
-# # g2o
+# g2o
 include(cmake/g2o.cmake)
 include_directories(${G2O_INCLUDE_DIRS})
 
