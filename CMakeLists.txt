@@ -31,7 +31,7 @@ include_directories(${EIGEN3_INCLUDE_DIRS})
 include(cmake/glog.cmake)
 include_directories(${GLOG_INCLUDE_DIRS})
 
-# g2o
+# # g2o
 include(cmake/g2o.cmake)
 include_directories(${G2O_INCLUDE_DIRS})
 
@@ -48,7 +48,10 @@ find_package(
 # livox message
 add_subdirectory(include/3rd/livox_ros_driver)
 
-add_service_files(FILES save_map.srv)
+add_service_files(
+DIRECTORY srv 
+FILES 
+save_map.srv)
 generate_messages(DEPENDENCIES std_msgs)
 catkin_package(
     INCLUDE_DIRS include
@@ -100,9 +103,12 @@ target_link_libraries(
     ${FLANN_LIBRARY}
     ${G2O_LIBRARIES}
 )
+add_dependencies(funny_lidar_slam_lib ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 
 add_executable(funny_lidar_slam app/lidar_slam_app.cpp)
 target_link_libraries(funny_lidar_slam funny_lidar_slam_lib)
+add_dependencies(funny_lidar_slam ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ### TEST ###
 option(build_unit_tests "will execute all unit tests" ON)
@@ -111,3 +117,15 @@ if (build_unit_tests)
     enable_testing()
     add_subdirectory(test)
 endif ()
+
+install(TARGETS funny_lidar_slam 
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+install(TARGETS funny_lidar_slam_lib 
+LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+install(
+    DIRECTORY launch config
+    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)

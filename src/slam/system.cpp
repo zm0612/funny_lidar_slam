@@ -770,6 +770,7 @@ void System::PublishMappingKeyFramePath() {
         }
 
         path.header.frame_id = kRosMapFrameID;
+        path.header.stamp = ros::Time::now();
         mapping_keyframe_path_pub_.publish(path);
     }
 }

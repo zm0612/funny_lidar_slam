@@ -32,24 +32,10 @@ A real-time multifunctional Lidar SLAM package. It has dual functions of Mapping
 For Ubuntu 20.04 or higher. After installing ROS, most of the dependent libraries have been installed, including the
 PCL/Eigen/CMake/etc.
 
-### 2.2 glog && gflag && gtest
+### 2.2 glog && gflag && gtest && g2o
 
 ```shell
-sudo apt-get install libgoogle-glog-dev libgflags-dev libgtest-dev
-```
-
-### 2.3 g2o
-
-```shell
-sudo apt install libeigen3-dev libspdlog-dev libsuitesparse-dev qtdeclarative5-dev qt5-qmake libqglviewer-dev-qt5 # g2o requirements
-
-git clone https://github.com/RainerKuemmerle/g2o.git
-cd g2o
-mkdir build
-cd build
-cmake ..
-make -j
-sudo make install
+sudo apt-get install libgoogle-glog-dev libgflags-dev libgtest-dev ros-noetic-libg2o
 ```
 
 ## 3.How to Build?

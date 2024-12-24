@@ -1,6 +1,6 @@
 sensor_topic:
-    lidar_topic: "/livox/lidar"
-    imu_topic: "/livox/imu"
+    lidar_topic: "/lidar_points_raw_front"
+    imu_topic: "/livox/imu/front"
 
 slam_mode: 1  # 1: Mapping, 2: Localization
 

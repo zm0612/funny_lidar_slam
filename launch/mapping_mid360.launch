@@ -1,4 +1,5 @@
 <launch>
+    <param name="use_sim_time" value="true" />
     <rosparam file="$(find funny_lidar_slam)/config/mapping/config_mid_360.yaml" command="load"/>
 
     <node pkg="funny_lidar_slam" type="funny_lidar_slam" name="funny_lidar_slam" output="screen"/>
