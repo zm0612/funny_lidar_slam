@@ -1,8 +1,0 @@
-<launch>
-    <rosparam file="$(find funny_lidar_slam)/config/mapping/config_mid_360.yaml" command="load"/>
-
-    <node pkg="funny_lidar_slam" type="funny_lidar_slam" name="funny_lidar_slam" output="screen"/>
-
-    <arg name="rviz_config" default="$(find funny_lidar_slam)/launch/display.rviz"/>
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_config)" required="false"/>
-</launch>

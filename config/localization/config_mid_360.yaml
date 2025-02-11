@@ -1,50 +1,67 @@
-sensor_topic:
-    lidar_topic: "/livox/lidar"
-    imu_topic: "/livox/imu"
+/**:
+    ros__parameters:
+        sensor_topic:
+            lidar_topic: "/livox/lidar"
+            imu_topic: "/livox/imu"
 
-slam_mode: 2  # 1: Mapping, 2: Localization
+        slam_mode: 2 # 1: Mapping, 2: Localization
 
-lidar:
-    # Velodyne_16, Velodyne_32, Velodyne_64, Ouster_128_os1,
-    # LeiShen_16, RoboSense_16, Livox_Avia, Livox_Mid_360, None
-    lidar_sensor_type: Livox_Mid_360
-    lidar_point_jump_span: 3
-    lidar_point_time_scale: 1.0e-9
-    lidar_use_min_distance: 0.5
-    lidar_use_max_distance: 1000.0
-    lidar_rotation_noise_std: 0.001
-    lidar_position_noise_std: 0.01
+        lidar:
+            # Velodyne_16, Velodyne_32, Velodyne_64, Ouster_128_os1,
+            # LeiShen_16, RoboSense_16, Livox_Avia, Livox_Mid_360, None
+            lidar_sensor_type: Livox_Mid_360
+            lidar_point_jump_span: 3
+            lidar_point_time_scale: 1.0e-9
+            lidar_use_min_distance: 0.5
+            lidar_use_max_distance: 1000.0
+            lidar_rotation_noise_std: 0.001
+            lidar_position_noise_std: 0.01
 
-imu:
-    init_acc_bias: 0.0
-    init_gyro_bias: 0.0
-    acc_noise_std: 0.1
-    gyro_noise_std: 0.1
-    acc_rw_noise_std: 1.0e-4
-    gyro_rw_noise_std: 1.0e-4
-    has_orientation: false
-    data_searcher_buffer_size: 5000
+        imu:
+            init_acc_bias: 0.0
+            init_gyro_bias: 0.0
+            acc_noise_std: 0.1
+            gyro_noise_std: 0.1
+            acc_rw_noise_std: 1.0e-4
+            gyro_rw_noise_std: 1.0e-4
+            has_orientation: false
+            data_searcher_buffer_size: 5000
 
-gravity: 9.81
+        gravity: 9.81
 
-calibration:
-    lidar_to_imu: [ 1.0, 0.0, 0.0, -0.011,
-                    0.0, 1.0, 0.0, -0.02329,
-                    0.0, 0.0, 1.0, 0.04412,
-                    0.0, 0.0, 0.0, 1.0 ]
+        calibration:
+            lidar_to_imu:
+                [
+                    1.0,
+                    0.0,
+                    0.0,
+                    -0.011,
+                    0.0,
+                    1.0,
+                    0.0,
+                    -0.02329,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.04412,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                ]
 
-frontend:
-    fusion_opti_iters: 30
-    fusion_method: TightCouplingOptimization # LooseCoupling, TightCouplingKF, TightCouplingOptimization
+        frontend:
+            fusion_opti_iters: 30
+            fusion_method: TightCouplingOptimization # LooseCoupling, TightCouplingKF, TightCouplingOptimization
 
-    registration_and_searcher_mode: IcpOptimized
-    registration:
-        local_map_size: 0
-        point_search_thres: 1.0
-        optimization_iter_num: 30
-        local_map_cloud_filter_size: 0.4
-        source_cloud_filter_size: 0.4
-        position_converge_thres: 0.005
-        rotation_converge_thres: 0.005
-        keyframe_delta_distance: 0.0
-        keyframe_delta_rotation: 0.0
+            registration_and_searcher_mode: IcpOptimized
+            registration:
+                local_map_size: 0
+                point_search_thres: 1.0
+                optimization_iter_num: 30
+                local_map_cloud_filter_size: 0.4
+                source_cloud_filter_size: 0.4
+                position_converge_thres: 0.005
+                rotation_converge_thres: 0.005
+                keyframe_delta_distance: 0.0
+                keyframe_delta_rotation: 0.0

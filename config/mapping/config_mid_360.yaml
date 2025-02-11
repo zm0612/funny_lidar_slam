@@ -1,64 +1,81 @@
-sensor_topic:
-    lidar_topic: "/livox/lidar"
-    imu_topic: "/livox/imu"
+/**:
+    ros__parameters:
+        sensor_topic:
+            lidar_topic: "/livox/lidar"
+            imu_topic: "/livox/imu"
 
-slam_mode: 1  # 1: Mapping, 2: Localization
+        slam_mode: 1 # 1: Mapping, 2: Localization
 
-lidar:
-    # Velodyne_16, Velodyne_32, Velodyne_64, Ouster_128_os1,
-    # LeiShen_16, RoboSense_16, Livox_Avia, Livox_Mid_360, None
-    lidar_sensor_type: Livox_Mid_360
-    lidar_point_jump_span: 3
-    lidar_point_time_scale: 1.0e-9
-    lidar_use_min_distance: 0.5
-    lidar_use_max_distance: 1000.0
-    lidar_rotation_noise_std: 0.001
-    lidar_position_noise_std: 0.01
+        lidar:
+            # Velodyne_16, Velodyne_32, Velodyne_64, Ouster_128_os1,
+            # LeiShen_16, RoboSense_16, Livox_Avia, Livox_Mid_360, None
+            lidar_sensor_type: Livox_Mid_360
+            lidar_point_jump_span: 3
+            lidar_point_time_scale: 1.0e-9
+            lidar_use_min_distance: 0.5
+            lidar_use_max_distance: 1000.0
+            lidar_rotation_noise_std: 0.001
+            lidar_position_noise_std: 0.01
 
-imu:
-    init_acc_bias: 0.0
-    init_gyro_bias: 0.0
-    acc_noise_std: 0.1
-    gyro_noise_std: 0.1
-    acc_rw_noise_std: 1.0e-4
-    gyro_rw_noise_std: 1.0e-4
-    has_orientation: false
-    data_searcher_buffer_size: 5000
+        imu:
+            init_acc_bias: 0.0
+            init_gyro_bias: 0.0
+            acc_noise_std: 0.1
+            gyro_noise_std: 0.1
+            acc_rw_noise_std: 1.0e-4
+            gyro_rw_noise_std: 1.0e-4
+            has_orientation: false
+            data_searcher_buffer_size: 5000
 
-gravity: 9.81
+        gravity: 9.81
 
-calibration:
-    lidar_to_imu: [ 1.0, 0.0, 0.0, -0.011,
-                    0.0, 1.0, 0.0, -0.02329,
-                    0.0, 0.0, 1.0, 0.04412,
-                    0.0, 0.0, 0.0, 1.0 ]
+        calibration:
+            lidar_to_imu:
+                [
+                    1.0,
+                    0.0,
+                    0.0,
+                    -0.011,
+                    0.0,
+                    1.0,
+                    0.0,
+                    -0.02329,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.04412,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                ]
 
-frontend:
-    fusion_opti_iters: 30
-    fusion_method: TightCouplingOptimization # LooseCoupling, TightCouplingKF, TightCouplingOptimization
+        frontend:
+            fusion_opti_iters: 30
+            fusion_method: TightCouplingOptimization # LooseCoupling, TightCouplingKF, TightCouplingOptimization
 
-    registration_and_searcher_mode: PointToPlane_IVOX
-    feature:
-        planar_voxel_filter_size: 0.5
-    registration:
-        optimization_iter_num: 30
-        point_to_planar_thres: 0.1
-        position_converge_thres: 0.001
-        rotation_converge_thres: 0.005
+            registration_and_searcher_mode: PointToPlane_IVOX
+            feature:
+                planar_voxel_filter_size: 0.5
+            registration:
+                optimization_iter_num: 30
+                point_to_planar_thres: 0.1
+                position_converge_thres: 0.001
+                rotation_converge_thres: 0.005
 
-system:
-    keyframe_delta_distance: 1.0
-    keyframe_delta_rotation: 0.2
-    enable_loopclosure: false
-    enable_visualize_global_map: true
-    global_map_visualization_resolution: 0.7
-    tile_map_grid_size: 100.0
+        system:
+            keyframe_delta_distance: 1.0
+            keyframe_delta_rotation: 0.2
+            enable_loopclosure: false
+            enable_visualize_global_map: true
+            global_map_visualization_resolution: 0.7
+            tile_map_grid_size: 100.0
 
-loopclosure:
-    registration_converge_threshold: 1.5
-    skip_near_loopclosure_threshold: 100
-    skip_near_keyframe_threshold: 100
-    candidate_local_map_left_range: 20
-    candidate_local_map_right_range: 20
-    loopclosure_local_map_left_range: 30
-    near_neighbor_distance_threshold: 10.0
+        loopclosure:
+            registration_converge_threshold: 1.5
+            skip_near_loopclosure_threshold: 100
+            skip_near_keyframe_threshold: 100
+            candidate_local_map_left_range: 20
+            candidate_local_map_right_range: 20
+            loopclosure_local_map_left_range: 30
+            near_neighbor_distance_threshold: 10.0

@@ -15,42 +15,32 @@ A real-time multifunctional Lidar SLAM package. It has dual functions of Mapping
 - Supports multiple Lidar types, and customize Lidar type.
 - Supports multiple pointcloud registration methods, and easily extendable to other registration methods.
 
-|                   Features                   |                           Details                            |
-| :------------------------------------------: | :----------------------------------------------------------: |
-|                  IMU Types                   |                       6-axis, 9-axis.                        |
+|                   Features                   |                                                   Details                                                   |
+| :------------------------------------------: | :---------------------------------------------------------------------------------------------------------: |
+|                  IMU Types                   |                                               6-axis, 9-axis.                                               |
 |                 Lidar Types                  | Solid State Lidar(Mid-360, Avia, etc), <br />Mechanical Lidar(Velodyne, Robosense, Ouster, etc),<br /> etc. |
-|             Registration Methods             | Loam Series, <br />Optimized-ICP, <br />Incremental-NDT, <br />even customizable via plug-in. |
-| LoopClosure Methods<br />(only Mapping mode) |        Euclidean distance based, <br />Feature based.        |
-|                Fusion Methods                |   Loose Coupling, <br />Kalman Filter, <br />Optimization.   |
+|             Registration Methods             |        Loam Series, <br />Optimized-ICP, <br />Incremental-NDT, <br />even customizable via plug-in.        |
+| LoopClosure Methods<br />(only Mapping mode) |                               Euclidean distance based, <br />Feature based.                                |
+|                Fusion Methods                |                          Loose Coupling, <br />Kalman Filter, <br />Optimization.                           |
 
 ## 2.Prerequisites
 
-### 2.1 Ubuntu and ROS
+### 2.1 Ubuntu and ROS2
 
-**Ubuntu >= 20.04 && ROS Noetic && C++17 Compiler**
+**Ubuntu >= 20.04 && ROS Humble && C++17 Compiler**
 
 For Ubuntu 20.04 or higher. After installing ROS, most of the dependent libraries have been installed, including the
 PCL/Eigen/CMake/etc.
 
-### 2.2 glog && gflag && gtest
+### 2.2 glog && gflag && gtest && g2o
 
 ```shell
-sudo apt-get install libgoogle-glog-dev libgflags-dev libgtest-dev
+sudo apt-get install libgoogle-glog-dev libgflags-dev libgtest-dev ros-humble-libg2o
 ```
 
-### 2.3 g2o
+### 2.3 livox_ros_driver2
 
-```shell
-sudo apt install libeigen3-dev libspdlog-dev libsuitesparse-dev qtdeclarative5-dev qt5-qmake libqglviewer-dev-qt5 # g2o requirements
-
-git clone https://github.com/RainerKuemmerle/g2o.git
-cd g2o
-mkdir build
-cd build
-cmake ..
-make -j
-sudo make install
-```
+Please follow the guidance of installation in the [livox_ros_driver2 Installation](https://github.com/Livox-SDK/livox_ros_driver2?tab=readme-ov-file).
 
 ## 3.How to Build?
 
@@ -59,10 +49,10 @@ sudo make install
 ```shell
 mkdir -p funny_lidar_slam_ws/src
 cd funny_lidar_slam_ws/src
-git clone https://github.com/zm0612/funny_lidar_slam.git
+git clone -b humble https://github.com/yangfuyuan/funny_lidar_slam.git
 cd ../
-catkin_make -j
-source devel/setup.bash
+colcon build
+source install/setup.bash
 ```
 
 ### 3.2 Build in Docker
@@ -72,7 +62,7 @@ If you want to use docker conatiner to run Funny Lidar SLAM, please install the 
 #### 3.2.1 Download project code to any path
 
 ```shell	
-git clone https://github.com/zm0612/funny_lidar_slam.git
+git clone -b humble https://github.com/yangfuyuan/funny_lidar_slam.git
 ```
 
 #### 3.2.2 Build Docker image and create the container
@@ -103,20 +93,20 @@ datasets. Of course you can also try other combinations.
 
 ```shell
 cd funny_lidar_slam_ws
-source devel/setup.bash
-roslaunch funny_lidar_slam mapping_M2DGR.launch
+source install/setup.bash
+ros2 launch funny_lidar_slam mapping_M2DGR.launch.py
 
-rosbag play street_02.bag # Play one of the sets of data
+#rosbag play street_02.bag # Play one of the sets of data
 ```
 
 - Dataset: [NCLT](https://robots.engin.umich.edu/nclt/index.html#download). You can also get part of the dataset from [Baidu Pan](https://pan.baidu.com/s/1Z3UzjP1FWJu9XSwujo_d5g?pwd=jggw) for testing.
 
 ```c++
 cd funny_lidar_slam_ws
-source devel/setup.bash
-roslaunch funny_lidar_slam mapping_nclt.launch
+source install/setup.bash
+ros2 launch funny_lidar_slam mapping_nclt.launch.py
 
-rosbag play 20130110.bag # Play one of the sets of data
+#rosbag play 20130110.bag # Play one of the sets of data
 ```
 
 ### 4.2 For Velodyne HDL-16E
@@ -125,10 +115,10 @@ The test dataset comes from: [LIO-SAM dataset](https://github.com/TixiaoShan/LIO
 
 ```shell
 cd funny_lidar_slam_ws
-source devel/setup.bash
-roslaunch funny_lidar_slam mapping_lio_sam.launch
+source install/setup.bash
+ros2 launch funny_lidar_slam mapping_lio_sam.launch.py
 
-rosbag play walking_dataset.bag # Play one of the sets of data
+#rosbag play walking_dataset.bag # Play one of the sets of data
 ```
 
 ### 4.3 For Livox Mid-360
@@ -137,10 +127,10 @@ You can download the Livox Mid-360 data from: [Baidu Pan](https://pan.baidu.com/
 
 ```shell
 cd funny_lidar_slam_ws
-source devel/setup.bash
-roslaunch funny_lidar_slam mapping_mid360.launch
+source install/setup.bash
+ros2 launch funny_lidar_slam mapping_mid360.launch.py
 
-rosbag play mid_360.bag # Play one of the sets of data
+#rosbag play mid_360.bag # Play one of the sets of data
 ```
 
 Note: If your Mid-360 format is `livox_ros_driver2/CustomMsg`, you can use `4.4 For Livox Avia` to run.
@@ -151,10 +141,10 @@ You can download the Livox Avia data from: [Baidu Pan](https://pan.baidu.com/s/1
 
 ```shell
 cd funny_lidar_slam_ws
-source devel/setup.bash
-roslaunch funny_lidar_slam mapping_livox_avia.launch
+source install/setup.bash
+ros2 launch funny_lidar_slam mapping_livox_avia.launch.py
 
-rosbag play avia.bag  # Play one of the sets of data
+#rosbag play avia.bag  # Play one of the sets of data
 ```
 
 Note: If your Livox Avia format is `sensor_msgs/PointCloud2`, you can use `4.3 For Livox Mid-360` to run.
@@ -165,18 +155,18 @@ You can download the data from: [Baidu Pan](https://pan.baidu.com/s/1rJiUiYibWml
 
 ```shell
 cd funny_lidar_slam_ws
-source devel/setup.bash
-roslaunch funny_lidar_slam mapping_turing.launch
+source install/setup.bash
+ros2 launch funny_lidar_slam mapping_turing.launch.py
 
-rosbag play our.bag # Play one of the sets of data
+#rosbag play our.bag # Play one of the sets of data
 ```
 
 ### 4.6 Save PointCloud Map
 
 ```shell
 cd funny_lidar_slam_ws
-source devel/setup.bash
-rosservice call /funny_lidar_slam/save_map "map_path: '' split_map: false"
+source install/setup.bash
+ros2 service call /save_map funny_lidar_slam/srv/SaveMap "{map_path: '', split_map: false}"
 ```
 Note: 
 `map_path`: is the path where the map is stored. If `map_path` is empty, the default path `funny_lidar_slam/data` is used for saving. If you want to save the map to a specific path, set `map_path`. For example: `"map_path: '/home/xx/xxx.pcd'"`
@@ -193,19 +183,18 @@ Copy your pointcloud map to the `funny_lidar_slam/data`  directory and change it
 - For Livox Mid 360
 
 ```shell
-roslaunch funny_lidar_slam localization_mid_360.launch
+ros2 launch funny_lidar_slam localization_mid_360.launch.py
 ```
-
 - For Velodyne-32
 
 ```shell
-roslaunch funny_lidar_slam localization_nclt.launch
+ros2 launch funny_lidar_slam localization_nclt.launch.py
 ```
 
 - For RoboSense-16
 
 ```shell
-roslaunch funny_lidar_slam localization_turing.launch
+ros2 launch funny_lidar_slam localization_turing.launch.py
 ```
 
 **Note**: Other Lidar models can be configured by referring to the above examples.
@@ -219,4 +208,4 @@ The localization program does not have a global relocalization function, so the 
 ## 6.Some Tips
 
 - If your IMU is 6-axis, and the fusion method is optimization, you need to ensure that your IMU and Lidar are stationary for at least two seconds before starting to run Mapping or Localization.
-- When you run the Mapping program, the default Rviz configuration will be started. In order to reduce resource usage, the pointcloud map is displayed roughly. If you want to display richer details, pass the Rviz configuration path when running the Mapping launch file. For example: `roslaunch funny_lidar_slam mapping_xxx.launch rviz_config:=/path/to/funny_lidar_slam/launch/display_detailed_without_loopclosure.rviz`
+- When you run the Mapping program, the default Rviz configuration will be started. In order to reduce resource usage, the pointcloud map is displayed roughly. If you want to display richer details, pass the Rviz configuration path when running the Mapping launch file. For example: `ros2 launch funny_lidar_slam mapping_xxx.launch.py rviz_config:=/path/to/funny_lidar_slam/launch/display_detailed_without_loopclosure.rviz`

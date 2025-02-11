@@ -5,7 +5,8 @@ include_directories(${GTEST_INCLUDE_DIRS})
 MESSAGE(${GTEST_MAIN_LIBRARIES})
 
 add_library(MAIN_TEST_LIB main_test.cpp)
-target_link_libraries(MAIN_TEST_LIB ${GTEST_LIBRARY} ${GLOG_LIBRARIES} funny_lidar_slam_lib)
+# target_link_libraries(MAIN_TEST_LIB ${GTEST_LIBRARY} ${GLOG_LIBRARIES} funny_lidar_slam_lib)
+target_link_libraries(MAIN_TEST_LIB GTest::GTest GTest::Main ${GLOG_LIBRARIES} funny_lidar_slam_lib)
 
 add_executable(math_function_ut math_function_ut.cpp)
 target_link_libraries(math_function_ut MAIN_TEST_LIB)

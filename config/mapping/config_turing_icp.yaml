@@ -1,73 +1,90 @@
-sensor_topic:
-    lidar_topic: "/rslidar_points"
-    imu_topic: "/IMU_data"
+/**:
+    ros__parameters:
+        sensor_topic:
+            lidar_topic: "/rslidar_points"
+            imu_topic: "/IMU_data"
 
-slam_mode: 1  # 1: Mapping, 2: Localization
+        slam_mode: 1 # 1: Mapping, 2: Localization
 
-lidar:
-    # Velodyne_16, Velodyne_32, Velodyne_64, Ouster_128_os1,
-    # LeiShen_16, RoboSense_16, Livox_Avia, Livox_Mid_360, None
-    lidar_sensor_type: None
-    lidar_point_jump_span: 1
-    lidar_point_time_scale: 1.0
-    lidar_use_min_distance: 2.0
-    lidar_use_max_distance: 50.0
-    lidar_rotation_noise_std: 0.001
-    lidar_position_noise_std: 0.01
+        lidar:
+            # Velodyne_16, Velodyne_32, Velodyne_64, Ouster_128_os1,
+            # LeiShen_16, RoboSense_16, Livox_Avia, Livox_Mid_360, None
+            lidar_sensor_type: None
+            lidar_point_jump_span: 1
+            lidar_point_time_scale: 1.0
+            lidar_use_min_distance: 2.0
+            lidar_use_max_distance: 50.0
+            lidar_rotation_noise_std: 0.001
+            lidar_position_noise_std: 0.01
 
-    # if lidar_sensor_type is equal to None, need set below parameters
-    lidar_scan: 16
-    lidar_lower_angle: 15.0 # degree
-    lidar_horizon_scan: 1800
-    lidar_vertical_resolution: 2.0 # degree
+            # if lidar_sensor_type is equal to None, need set below parameters
+            lidar_scan: 16
+            lidar_lower_angle: 15.0 # degree
+            lidar_horizon_scan: 1800
+            lidar_vertical_resolution: 2.0 # degree
 
-imu:
-    init_acc_bias: 0.0
-    init_gyro_bias: 0.0
-    acc_noise_std: 0.1
-    gyro_noise_std: 0.01
-    acc_rw_noise_std: 1.0e-5
-    gyro_rw_noise_std: 1.0e-5
-    has_orientation: true
-    data_searcher_buffer_size: 5000
+        imu:
+            init_acc_bias: 0.0
+            init_gyro_bias: 0.0
+            acc_noise_std: 0.1
+            gyro_noise_std: 0.01
+            acc_rw_noise_std: 1.0e-5
+            gyro_rw_noise_std: 1.0e-5
+            has_orientation: true
+            data_searcher_buffer_size: 5000
 
-gravity: 9.81
+        gravity: 9.81
 
-calibration:
-    lidar_to_imu: [ 1.0, 0.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0 ]
+        calibration:
+            lidar_to_imu:
+                [
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    1.0,
+                ]
 
-frontend:
-    fusion_opti_iters: 10
-    fusion_method: LooseCoupling # LooseCoupling, TightCouplingKF, TightCouplingOptimization
+        frontend:
+            fusion_opti_iters: 10
+            fusion_method: LooseCoupling # LooseCoupling, TightCouplingKF, TightCouplingOptimization
 
-    registration_and_searcher_mode: IcpOptimized
-    registration:
-        local_map_size: 80
-        point_search_thres: 0.5
-        optimization_iter_num: 30
-        local_map_cloud_filter_size: 0.4
-        source_cloud_filter_size: 0.5
-        position_converge_thres: 0.01
-        rotation_converge_thres: 0.05
-        keyframe_delta_distance: 1.0
-        keyframe_delta_rotation: 0.2
+            registration_and_searcher_mode: IcpOptimized
+            registration:
+                local_map_size: 80
+                point_search_thres: 0.5
+                optimization_iter_num: 30
+                local_map_cloud_filter_size: 0.4
+                source_cloud_filter_size: 0.5
+                position_converge_thres: 0.01
+                rotation_converge_thres: 0.05
+                keyframe_delta_distance: 1.0
+                keyframe_delta_rotation: 0.2
 
-system:
-    keyframe_delta_distance: 1.0
-    keyframe_delta_rotation: 0.2
-    enable_loopclosure: true
-    enable_visualize_global_map: true
-    global_map_visualization_resolution: 0.7
-    tile_map_grid_size: 100.0
+        system:
+            keyframe_delta_distance: 1.0
+            keyframe_delta_rotation: 0.2
+            enable_loopclosure: true
+            enable_visualize_global_map: true
+            global_map_visualization_resolution: 0.7
+            tile_map_grid_size: 100.0
 
-loopclosure:
-    registration_converge_threshold: 1.5
-    skip_near_loopclosure_threshold: 100
-    skip_near_keyframe_threshold: 100
-    candidate_local_map_left_range: 30
-    candidate_local_map_right_range: 30
-    loopclosure_local_map_left_range: 30
-    near_neighbor_distance_threshold: 10.0
+        loopclosure:
+            registration_converge_threshold: 1.5
+            skip_near_loopclosure_threshold: 100
+            skip_near_keyframe_threshold: 100
+            candidate_local_map_left_range: 30
+            candidate_local_map_right_range: 30
+            loopclosure_local_map_left_range: 30
+            near_neighbor_distance_threshold: 10.0

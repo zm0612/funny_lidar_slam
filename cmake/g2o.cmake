@@ -1,132 +1,69 @@
-# Find the header files
+IF(UNIX)
+  MESSAGE(STATUS "Searching for g2o ...")
+  FIND_PATH(G2O_INCLUDE_DIR
+    NAMES core math_groups types
+    PATHS /usr/local /usr
+    PATH_SUFFIXES include/g2o include)
+  IF (G2O_INCLUDE_DIR)
+    MESSAGE(STATUS "Found g2o headers in: ${G2O_INCLUDE_DIR}")
+  ENDIF ()
 
-find_path(G2O_INCLUDE_DIR g2o/core/base_vertex.h
-    ${G2O_ROOT}/include
-    $ENV{G2O_ROOT}/include
-    $ENV{G2O_ROOT}
-    /usr/local/include
-    /usr/include
-    /opt/local/include
-    /sw/local/include
-    /sw/include
-    NO_DEFAULT_PATH
-)
+  FIND_LIBRARY(G2O_CORE_LIB
+    NAMES g2o_core g2o_core_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_STUFF_LIB
+    NAMES g2o_stuff g2o_stuff_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_TYPES_SLAM2D_LIB
+    NAMES g2o_types_slam2d g2o_types_slam2d_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_TYPES_SLAM3D_LIB
+    NAMES g2o_types_slam3d g2o_types_slam3d_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_SOLVER_CHOLMOD_LIB
+    NAMES g2o_solver_cholmod g2o_solver_cholmod_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_SOLVER_PCG_LIB
+    NAMES g2o_solver_pcg g2o_solver_pcg_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_SOLVER_CSPARSE_LIB
+    NAMES g2o_solver_csparse g2o_solver_csparse_rd
+    PATHS /usr/local /usr
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_INCREMENTAL_LIB
+    NAMES g2o_incremental g2o_incremental_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
+  FIND_LIBRARY(G2O_CSPARSE_EXTENSION_LIB
+    NAMES g2o_csparse_extension g2o_csparse_extension_rd
+    PATHS /usr/local /usr ${CMAKE_PREFIX_PATH}
+    PATH_SUFFIXES lib)
 
-# Macro to unify finding both the debug and release versions of the
-# libraries; this is adapted from the OpenSceneGraph FIND_LIBRARY
-# macro.
+  SET(G2O_LIBRARIES ${G2O_CSPARSE_EXTENSION_LIB}
+                    ${G2O_CORE_LIB}
+                    ${G2O_STUFF_LIB}
+                    ${G2O_TYPES_SLAM2D_LIB}
+                    ${G2O_TYPES_SLAM3D_LIB}
+                    ${G2O_SOLVER_CHOLMOD_LIB}
+                    ${G2O_SOLVER_PCG_LIB}
+                    ${G2O_SOLVER_CSPARSE_LIB}
+                    ${G2O_INCREMENTAL_LIB})
 
-macro(FIND_G2O_LIBRARY MYLIBRARY MYLIBRARYNAME)
-
-    find_library("${MYLIBRARY}_DEBUG"
-        NAMES "g2o_${MYLIBRARYNAME}_d"
-        PATHS
-        ${G2O_ROOT}/lib/Debug
-        ${G2O_ROOT}/lib
-        $ENV{G2O_ROOT}/lib/Debug
-        $ENV{G2O_ROOT}/lib
-        NO_DEFAULT_PATH
-    )
-
-    find_library("${MYLIBRARY}_DEBUG"
-        NAMES "g2o_${MYLIBRARYNAME}_d"
-        PATHS
-        ~/Library/Frameworks
-        /Library/Frameworks
-        /usr/local/lib
-        /usr/local/lib64
-        /usr/lib
-        /usr/lib64
-        /opt/local/lib
-        /sw/local/lib
-        /sw/lib
-    )
-
-    find_library(${MYLIBRARY}
-        NAMES "g2o_${MYLIBRARYNAME}"
-        PATHS
-        ${G2O_ROOT}/lib/Release
-        ${G2O_ROOT}/lib
-        $ENV{G2O_ROOT}/lib/Release
-        $ENV{G2O_ROOT}/lib
-        NO_DEFAULT_PATH
-    )
-
-    find_library(${MYLIBRARY}
-        NAMES "g2o_${MYLIBRARYNAME}"
-        PATHS
-        ~/Library/Frameworks
-        /Library/Frameworks
-        /usr/local/lib
-        /usr/local/lib64
-        /usr/lib
-        /usr/lib64
-        /opt/local/lib
-        /sw/local/lib
-        /sw/lib
-    )
-
-    if (NOT ${MYLIBRARY}_DEBUG)
-        if (MYLIBRARY)
-            set(${MYLIBRARY}_DEBUG ${MYLIBRARY})
-        endif (MYLIBRARY)
-    endif (NOT ${MYLIBRARY}_DEBUG)
-
-endmacro(FIND_G2O_LIBRARY LIBRARY LIBRARYNAME)
-
-# Find the core elements
-FIND_G2O_LIBRARY(G2O_STUFF_LIBRARY stuff)
-FIND_G2O_LIBRARY(G2O_CORE_LIBRARY core)
-
-# Find the CLI library
-FIND_G2O_LIBRARY(G2O_CLI_LIBRARY cli)
-
-# Find the pluggable solvers
-FIND_G2O_LIBRARY(G2O_SOLVER_CHOLMOD solver_cholmod)
-FIND_G2O_LIBRARY(G2O_SOLVER_CSPARSE solver_csparse)
-FIND_G2O_LIBRARY(G2O_SOLVER_CSPARSE_EXTENSION csparse_extension)
-FIND_G2O_LIBRARY(G2O_SOLVER_DENSE solver_dense)
-FIND_G2O_LIBRARY(G2O_SOLVER_PCG solver_pcg)
-FIND_G2O_LIBRARY(G2O_SOLVER_SLAM2D_LINEAR solver_slam2d_linear)
-FIND_G2O_LIBRARY(G2O_SOLVER_STRUCTURE_ONLY solver_structure_only)
-FIND_G2O_LIBRARY(G2O_SOLVER_EIGEN solver_eigen)
-
-# Find the predefined types
-FIND_G2O_LIBRARY(G2O_TYPES_DATA types_data)
-FIND_G2O_LIBRARY(G2O_TYPES_ICP types_icp)
-FIND_G2O_LIBRARY(G2O_TYPES_SBA types_sba)
-FIND_G2O_LIBRARY(G2O_TYPES_SCLAM2D types_sclam2d)
-FIND_G2O_LIBRARY(G2O_TYPES_SIM3 types_sim3)
-FIND_G2O_LIBRARY(G2O_TYPES_SLAM2D types_slam2d)
-FIND_G2O_LIBRARY(G2O_TYPES_SLAM3D types_slam3d)
-
-# G2O solvers declared found if we found at least one solver
-set(G2O_SOLVERS_FOUND "NO")
-if (G2O_SOLVER_CHOLMOD OR G2O_SOLVER_CSPARSE OR G2O_SOLVER_DENSE OR G2O_SOLVER_PCG OR G2O_SOLVER_SLAM2D_LINEAR OR G2O_SOLVER_STRUCTURE_ONLY OR G2O_SOLVER_EIGEN)
-    set(G2O_SOLVERS_FOUND "YES")
-endif (G2O_SOLVER_CHOLMOD OR G2O_SOLVER_CSPARSE OR G2O_SOLVER_DENSE OR G2O_SOLVER_PCG OR G2O_SOLVER_SLAM2D_LINEAR OR G2O_SOLVER_STRUCTURE_ONLY OR G2O_SOLVER_EIGEN)
-
-# G2O itself declared found if we found the core libraries and at least one solver
-set(G2O_FOUND "NO")
-if (G2O_STUFF_LIBRARY AND G2O_CORE_LIBRARY AND G2O_INCLUDE_DIR AND G2O_SOLVERS_FOUND)
-    set(G2O_FOUND "YES")
-endif (G2O_STUFF_LIBRARY AND G2O_CORE_LIBRARY AND G2O_INCLUDE_DIR AND G2O_SOLVERS_FOUND)
-
-if (G2O_FOUND AND G2O_INCLUDE_DIR)
-    set(G2O_INCLUDE_DIRS ${G2O_INCLUDE_DIR})
-
-    set(G2O_LIBRARIES
-        ${G2O_STUFF_LIBRARY}
-        ${G2O_CORE_LIBRARY}
-        ${G2O_CLI_LIBRARY}
-        ${G2O_TYPES_SLAM3D}
-        ${G2O_TYPES_DATA}
-        ${G2O_SOLVER_CHOLMOD}
-        ${G2O_SOLVER_CSPARSE}
-        ${G2O_SOLVER_CSPARSE_EXTENSION}
-        ${G2O_SOLVER_DENSE}
-        ${G2O_SOLVER_PCG}
-        ${G2O_SOLVER_SLAM2D_LINEAR}
-        ${G2O_SOLVER_STRUCTURE_ONLY}
-        ${G2O_SOLVER_EIGEN})
-endif ()
+  IF(G2O_LIBRARIES AND G2O_INCLUDE_DIR)
+    SET(G2O_FOUND "YES")
+    MESSAGE(STATUS "Found libg2o: ${G2O_LIBRARIES}")
+  ELSE()
+    IF(NOT G2O_LIBRARIES)
+      message(FATAL_ERROR "Could not find libg2o!")
+    ENDIF()
+    IF(NOT G2O_INCLUDE_DIR)
+      message(FATAL_ERROR "Could not find g2o include directory!")
+    ENDIF()
+  ENDIF()
+ENDIF(UNIX)
