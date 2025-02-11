@@ -49,7 +49,7 @@ Please follow the guidance of installation in the [livox_ros_driver2 Installatio
 ```shell
 mkdir -p funny_lidar_slam_ws/src
 cd funny_lidar_slam_ws/src
-git clone -b humble https://github.com/yangfuyuan/funny_lidar_slam.git
+git clone -b humble https://github.com/zm0612/funny_lidar_slam.git
 cd ../
 colcon build
 source install/setup.bash
@@ -62,7 +62,7 @@ If you want to use docker conatiner to run Funny Lidar SLAM, please install the 
 #### 3.2.1 Download project code to any path
 
 ```shell	
-git clone -b humble https://github.com/yangfuyuan/funny_lidar_slam.git
+git clone -b humble https://github.com/zm0612/funny_lidar_slam.git
 ```
 
 #### 3.2.2 Build Docker image and create the container
