@@ -51,3 +51,5 @@ frontend:
         point_to_planar_thres: 0.1
         position_converge_thres: 0.01
         rotation_converge_thres: 0.01
+
+save_localization_path: false

@@ -49,7 +49,7 @@ struct KeyFrame {
         return cloud;
     }
 
-    void SaveAllCloud() {
+    void SaveAllCloud() const {
         Timer timer;
         if (!cloud_cluster_ptr_) {
             LOG(ERROR) << "Cloud cluster nullptr";

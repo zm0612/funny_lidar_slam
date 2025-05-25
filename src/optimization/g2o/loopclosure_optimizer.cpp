@@ -40,7 +40,7 @@ void LoopClosureOptimizer::AddEdge(const Mat4d& delta_pose, const Mat6d& info, i
     optimizer_ptr_->addEdge(edge);
 }
 
-void LoopClosureOptimizer::Optimize(int num_iter) {
+void LoopClosureOptimizer::Optimize(const int num_iter) {
     if (optimizer_ptr_->edges().empty()) {
         return;
     }

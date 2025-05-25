@@ -102,6 +102,10 @@ public:
     int registration_local_corner_map_size_{};
     int registration_opti_iter_num_{};
 
+    // save path
+    bool save_mapping_path_{false};
+    bool save_localization_path_{false};
+
     // split map
     double tile_map_grid_size_{};
 

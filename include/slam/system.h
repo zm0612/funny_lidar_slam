@@ -72,6 +72,8 @@ private:
 
     void InitConfigParameters();
 
+    void InitPathSaving();
+
     void PublishMappingKeyFramePath();
 
     void PublishLocalizationPath();
@@ -185,6 +187,10 @@ public:
 
     // keyframes
     std::vector<KeyFrame::Ptr> keyframes_;
+
+    // path file
+    std::ofstream mapping_path_file_;
+    std::ofstream localization_path_file_;
 
     // localization ros path
     nav_msgs::Path localization_path_;

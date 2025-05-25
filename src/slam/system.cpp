@@ -9,6 +9,7 @@
 #include "slam/preprocessing.h"
 #include "slam/config_parameters.h"
 #include "lidar/lidar_point_type.h"
+#include "common/save_file.h"
 #include "common/ros_utility.h"
 #include "common/constant_variable.h"
 #include "common/pointcloud_utility.h"
@@ -25,6 +26,7 @@ System::System(std::shared_ptr<ros::NodeHandle> node_handle_ptr) :
     InitLidarModel();
     InitPublisher();
     InitSubscriber();
+    InitPathSaving();
 
     imu_data_searcher_ptr_ = std::make_shared<IMUDataSearcher>(
         ConfigParameters::Instance().imu_data_searcher_buffer_size_);
@@ -102,7 +104,7 @@ System::~System() {
 void System::InitLidarModel() {
     if (ConfigParameters::Instance().lidar_sensor_type_ == "None") {
         LidarModel::Instance(ConfigParameters::Instance().lidar_sensor_type_);
-        int lidar_horizon_scan = ConfigParameters::Instance().lidar_horizon_scan_;
+        const int lidar_horizon_scan = ConfigParameters::Instance().lidar_horizon_scan_;
         LidarModel::Instance()->horizon_scan_num_ = lidar_horizon_scan;
         LidarModel::Instance()->vertical_scan_num_ = ConfigParameters::Instance().lidar_scan_;
         LidarModel::Instance()->h_res_ = Degree2Radian(360.0f / static_cast<float>(lidar_horizon_scan));
@@ -114,6 +116,17 @@ void System::InitLidarModel() {
         LidarModel::Instance(ConfigParameters::Instance().lidar_sensor_type_);
     }
 }
+
+void System::InitPathSaving() {
+    if (ConfigParameters::Instance().save_mapping_path_) {
+        mapping_path_file_.open(kMappingPathFileName, std::ios::trunc | std::ios::out);
+    }
+
+    if (ConfigParameters::Instance().save_localization_path_) {
+        localization_path_file_.open(kLocalizationPathFileName, std::ios::trunc | std::ios::out);
+    }
+}
+
 
 void System::InitConfigParameters() {
     ConfigParameters& config = ConfigParameters::Instance();
@@ -245,6 +258,10 @@ void System::InitConfigParameters() {
                             config.lc_near_neighbor_distance_threshold_, DoubleNaN);
     node_handle_ptr_->param("loopclosure/registration_converge_threshold",
                             config.lc_registration_converge_threshold_, FloatNaN);
+
+    // save path
+    node_handle_ptr_->param("system/save_mapping_path", config.save_mapping_path_, false);
+    node_handle_ptr_->param("save_localization_path", config.save_localization_path_, false);
 }
 
 void System::InitLocalizationPublisher() {
@@ -608,6 +625,16 @@ bool System::ProcessLocalizationResultCache() {
     const Mat4d pose = nav_state_data->Pose();
     PublishTF(pose, nav_state_data->timestamp_);
 
+    // save localization path
+    if (ConfigParameters::Instance().save_localization_path_) {
+        static TimeStampUs last_save_timestamp = nav_state_data->timestamp_;
+
+        if ((nav_state_data->timestamp_ - last_save_timestamp) / 1.0e6 > 0.5) {
+            SaveTumPose(localization_path_file_, nav_state_data->Pose(), nav_state_data->timestamp_);
+            last_save_timestamp = nav_state_data->timestamp_;
+        }
+    }
+
     const Eigen::Quaterniond q(pose.block<3, 3>(0, 0));
     const Vec3d& t = pose.block<3, 1>(0, 3);
     geometry_msgs::PoseStamped pose_stamped;
@@ -645,7 +672,7 @@ bool System::ProcessMappingFrameCache() {
     {
         std::lock_guard<std::mutex> lg(mutex_keyframes_);
         if (IsKeyFrame(accumulated_pose)) {
-            KeyFrame::Ptr keyframe = std::make_shared<KeyFrame>();
+            const auto keyframe = std::make_shared<KeyFrame>();
             keyframe->timestamp_ = frame->timestamp_;
             keyframe->cloud_cluster_ptr_ = frame->cloud_cluster_ptr_;
 
@@ -657,6 +684,10 @@ bool System::ProcessMappingFrameCache() {
                 keyframe->id_ = keyframes_.back()->id_ + 1;
                 keyframe->pose_ = keyframes_.back()->pose_ * accumulated_pose;
                 loop_closure_optimizer_ptr_->AddVertex(keyframe->pose_, keyframe->id_, false);
+            }
+
+            if (ConfigParameters::Instance().save_mapping_path_) {
+                SaveTumPose(mapping_path_file_, keyframe->pose_, keyframe->timestamp_);
             }
 
             keyframes_.push_back(keyframe);
@@ -708,12 +739,21 @@ void System::PerformLoopclosureOptimization() {
 
     loop_closure_optimizer_ptr_->Optimize(15);
 
+    if (ConfigParameters::Instance().save_mapping_path_) {
+        mapping_path_file_.close();
+        mapping_path_file_.open(kMappingPathFileName, std::ios::trunc | std::ios::out);
+    }
+
     {
         std::lock_guard<std::mutex> lg(mutex_keyframes_);
 
-        for (auto& keyframe : keyframes_) {
+        for (const auto& keyframe : keyframes_) {
             const auto id = keyframe->id_;
             keyframe->pose_ = loop_closure_optimizer_ptr_->GetVertexEstimate(id);
+
+            if (ConfigParameters::Instance().save_mapping_path_) {
+                SaveTumPose(mapping_path_file_, keyframe->pose_, keyframe->timestamp_);
+            }
         }
     }
 

@@ -48,3 +48,5 @@ frontend:
         rotation_converge_thres: 0.005
         keyframe_delta_distance: 0.0
         keyframe_delta_rotation: 0.0
+
+save_localization_path: false

@@ -50,6 +50,7 @@ system:
     keyframe_delta_distance: 1.0
     keyframe_delta_rotation: 0.2
     enable_loopclosure: true
+    save_mapping_path: false
     enable_visualize_global_map: true
     global_map_visualization_resolution: 0.7
     tile_map_grid_size: 100.0
