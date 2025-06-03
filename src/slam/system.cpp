@@ -619,6 +619,7 @@ bool System::ProcessLocalizationResultCache() {
     pose_stamped.pose.position.y = t.y();
     pose_stamped.pose.position.z = t.z();
     pose_stamped.header.frame_id = kRosMapFrameID;
+    pose_stamped.header.stamp = UsToRosTime(nav_state_data->timestamp_);
     localization_path_.poses.emplace_back(std::move(pose_stamped));
 
     return true;
@@ -723,6 +724,7 @@ void System::PerformLoopclosureOptimization() {
 void System::PublishLocalizationPath() {
     if (localization_path_pub_.getNumSubscribers() > 0) {
         localization_path_.header.frame_id = kRosMapFrameID;
+        localization_path_.header.stamp = ros::Time::now();
         localization_path_pub_.publish(localization_path_);
     }
 }
@@ -770,6 +772,7 @@ void System::PublishMappingKeyFramePath() {
         }
 
         path.header.frame_id = kRosMapFrameID;
+        path.header.stamp = ros::Time::now();
         mapping_keyframe_path_pub_.publish(path);
     }
 }

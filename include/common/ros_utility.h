@@ -33,6 +33,14 @@ inline uint64_t RosTimeToUs(const std_msgs::Header_<std::allocator<void>> &heade
     return header.stamp.sec * 1000000ul + header.stamp.nsec / 1000ul;
 }
 
+ros::Time UsToRosTime(uint64_t time) {
+    ros::Time ros_time;
+    ros_time.sec = time / 1000000ul;
+    ros_time.nsec = time % 1000000ul * 1000ul;
+    return ros_time;
+}
+
+
 inline void PublishRosCloud(ros::Publisher &pub, const PCLPointCloudXYZI::Ptr &cloud) {
     if (pub.getNumSubscribers() == 0) {
         return;
@@ -41,6 +49,7 @@ inline void PublishRosCloud(ros::Publisher &pub, const PCLPointCloudXYZI::Ptr &c
     sensor_msgs::PointCloud2 cloud_ros;
     pcl::toROSMsg(*cloud, cloud_ros);
     cloud_ros.header.frame_id = kRosMapFrameID;
+    cloud_ros.header.stamp = ros::Time::now();
     pub.publish(cloud_ros);
 }
 
